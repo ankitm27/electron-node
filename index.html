@@ -2,23 +2,38 @@
 <html>
 <head>
     <meta charset = "UTF-8">
-    <title>Hello World!</title>
+    <title>Menus</title>
 </head>
 
 <body>
-<script>
-    const {ipcRenderer} = require('electron')
+<div>
+    <div>
+        <h2>We have the website embedded below!</h2>
+    </div>
+    <webview id = "foo" src = "https://www.tutorialspoint.com/" style =
+            "width:400px; height:480px;">
+        <div class = "indicator"></div>
+    </webview>
+</div>
 
-    // Synchronous message emmiter and handler
-    console.log(ipcRenderer.sendSync('synchronous-message', 'sync ping'))
+<script type = "text/javascript">
+    // Event handlers for loading events.
+    // Use these to handle loading screens, transitions, etc
+    onload = () => {
+        const webview = document.getElementById('foo')
+        const indicator = document.querySelector('.indicator')
 
-    // Async message handler
-    ipcRenderer.on('asynchronous-reply', (event,arg) => {
-        console.log(arg)
-    })
+        const loadstart = () => {
+            indicator.innerText = 'loading...'
+        }
 
-    // Async message sender
-    ipcRenderer.send('asynchronous-message', 'async ping')
+        const loadstop = () => {
+            indicator.innerText = ''
+        }
+
+        webview.addEventListener('did-start-loading', loadstart)
+        webview.addEventListener('did-stop-loading', loadstop)
+    }
 </script>
 </body>
 </html>
